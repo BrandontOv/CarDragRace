@@ -1,7 +1,9 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ControllerVueltas : MonoBehaviour
 {
@@ -15,6 +17,14 @@ public class ControllerVueltas : MonoBehaviour
     [SerializeField] GameObject check3;
     [SerializeField] GameObject check4;
 
+    [SerializeField] GameObject Pause;
+    [SerializeField] GameObject Win;
+
+    [SerializeField] TMP_Text TxtLap;
+
+
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -26,11 +36,22 @@ public class ControllerVueltas : MonoBehaviour
     {
         if (lap == 3){
 
-            Debug.LogWarning("Acabaste");
+            Debug.Log("Acabaste");
+            Win.SetActive(true);
+
+            Invoke("creditos",2);
+
         }
       
-            
+      if(Input.GetKeyDown (KeyCode.Escape)){
 
+                Pause.SetActive(true);
+                Time.timeScale = 0;
+
+                Debug.LogWarning("sebbugea");
+            }
+
+            TxtLap.text = "Vueltas 3/ " + lap;
         
     }
 
@@ -88,6 +109,7 @@ public class ControllerVueltas : MonoBehaviour
 
         void reactivemeta(){
             Meta.SetActive (true);
+            
         }
 
        void  OnTriggerExit(Collider other)
@@ -99,10 +121,24 @@ public class ControllerVueltas : MonoBehaviour
 
                 Debug.Log("Vuelta:"+lap+"/3");
                 Meta.SetActive (false);
-                Invoke("reactivemeta",4);
+                Invoke("reactivemeta",2);
+                checkpoints=0;
 
             }
+            if (other.gameObject.tag=="Fixer"&& checkpoints >=4){
 
+                checkpoints = 4;
+            }
 
         }
+
+        void creditos(){
+
+            SceneManager.LoadScene("Creditos");
+            Time.timeScale = 1;
+            Debug.Log("");
+        }
+
+        
+        
 }
